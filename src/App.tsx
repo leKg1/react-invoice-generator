@@ -3,26 +3,32 @@ import InvoicePage from './components/InvoicePage'
 import { useMoralis, useMoralisQuery, useNewMoralisObject } from 'react-moralis'
 import Head from './Head';
 import Row from './Row';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
+
 interface Invoice {
-  title: string;
+  invoiceTitle: string;
   clientName: string;
   invoiceDate: string;
 }
-interface Props {
-  invoices: Invoice[];
-}
 
-const InvoicesTable: FunctionComponent<Props> = ({ invoices }) => {
+const InvoicesTable: FunctionComponent = () => {
+  const { fetch, data, isLoading } = useMoralisQuery("Invoices")
   return (
     <table>
       <Head />
       <tbody>
-        {invoices.map((invoice) => (
+        {data.map((d) => (
           <Row
             // key={i}
-            title={invoice.title}
-            clientName={invoice.clientName}
-            invoiceDate={invoice.invoiceDate}
+            invoiceNo={d.attributes.invoice.invoiceTitle}
+            clientName={d.attributes.invoice.clientName}
+            invoiceDate={d.attributes.invoice.invoiceDate}
           />
         ))}
       </tbody>
@@ -41,7 +47,15 @@ function App() {
     user,
     isAuthUndefined,
   } = useMoralis();
-  const { fetch, data, isLoading } = useMoralisQuery("Invoices");
+  // const { fetch, data, isLoading } = useMoralisQuery("Invoices")
+  // const invoiceNo = "2021-001"
+  let { invoiceNo } = useParams()
+
+
+  const { fetch, data, isLoading } = useMoralisQuery("Invoices",
+    query =>
+      query
+      .equalTo("invoice.invoiceTitle", invoiceNo));
   const { isSaving, error, save } = useNewMoralisObject('Invoices');
 
   const newInvoice = () => {
@@ -49,32 +63,34 @@ function App() {
     console.log(invoice)
   }
 
-  const saveInvoice = () => {
-     save({invoice, user})
-  }
-
-  console.log(isAuthenticated)
-  console.log(data.length)
+  console.log("isAuthenticated", isAuthenticated)
+  console.log("invoiceNo", invoiceNo)
+  console.log("dataLength",data.length)
   if (data.length > 0 && isAuthenticated) {
     const _invoices:Invoice[] = data.map((d) => {
       return d.attributes.invoice;
     });
-    console.log(invoice)
+    console.log("data",data)
     return (
       <div className="app">
         <h1 className="center fs-30">React Invoice Generator</h1>
-        <InvoicesTable invoices={_invoices} />
-        <button onClick={newInvoice}>New</button>
-        {/* <button onClick={saveInvoice}>Save</button>       */}
-        
-        <InvoicePage saveInvoice={ save({invoice, user})} data={invoice!==undefined?data[0].attributes.invoice:undefined} />
+        <button onClick={() => logout()}>Logout</button>
+        <InvoicesTable />
+          <Route path="/:invoiceNo" children={<InvoicePage 
+           save={save}
+           user={user}
+           data={(data!==undefined && data.length> 0)?data[0].attributes.invoice:undefined} 
+           />} />       
       </div>
     );
-  } else return <div>
+  } else { return !isAuthenticated?(<div>
     <button onClick={() => authenticate()}>Authenticate</button>
-    <button onClick={() => logout()}>Logout</button>
   Loading...
-  </div>;
+  </div>):<div>
+    <button onClick={newInvoice}>New Invoice</button>
+    <InvoicesTable /> 
+    </div>
+  }
 }
 
 export default App

@@ -13,7 +13,14 @@ import Text from './Text'
 import { Font } from '@react-pdf/renderer'
 import Download from './DownloadPDF'
 import format from 'date-fns/format'
-// import { useMoralis, useMoralisQuery, useNewMoralisObject } from 'react-moralis'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
+
 
 Font.register({
   family: 'Nunito',
@@ -26,25 +33,15 @@ Font.register({
 interface Props {
   data?: Invoice
   pdfMode?: boolean
-  saveInvoice?: void
+  save?: any
+  user?: any
 }
 
-const InvoicePage: FC<Props> = ({ data, pdfMode, saveInvoice }) => {
-  // const [invoice, setInvoice] = useState<Invoice>({...data})
+const InvoicePage: FC<Props> = ({ data, pdfMode, save, user }) => {
+  // let { invoiceNo } = useParams();
   const [invoice, setInvoice] = useState<Invoice>(data ? { ...data } : { ...initialInvoice })
   const [subTotal, setSubTotal] = useState<number>()
   const [saleTax, setSaleTax] = useState<number>()
-
-  // const {
-  //   authenticate,
-  //   isAuthenticated,
-  //   isAuthenticating,
-  //   authError,
-  //   logout,
-  //   user,
-  //   isAuthUndefined,
-  // } = useMoralis();
-  // const { isSaving, error, save } = useNewMoralisObject('Invoices');
 
   const dateFormat = 'MMM dd, yyyy'
   const invoiceDate = invoice.invoiceDate !== '' ? new Date(invoice.invoiceDate) : new Date()
@@ -56,6 +53,7 @@ const InvoicePage: FC<Props> = ({ data, pdfMode, saveInvoice }) => {
   if (invoice.invoiceDueDate === '') {
     invoiceDueDate.setDate(invoiceDueDate.getDate() + 30)
   }
+  
 
   const handleChange = (name: keyof Invoice, value: string) => {
     if (name !== 'productLines') {
@@ -65,6 +63,8 @@ const InvoicePage: FC<Props> = ({ data, pdfMode, saveInvoice }) => {
       setInvoice(newInvoice)
     }
   }
+
+  // console.log("invoiceNo", useParams())
 
   const handleProductLineChange = (index: number, name: keyof ProductLine, value: string) => {
     const productLines = invoice.productLines.map((productLine, i) => {
@@ -137,16 +137,16 @@ const InvoicePage: FC<Props> = ({ data, pdfMode, saveInvoice }) => {
     setSaleTax(saleTax)
   }, [subTotal, invoice.taxLabel])
 
-  //   const saveInvoice = () => {
-  //    save({invoice, user})
-  // }
+    const saveInvoice = () => {
+      console.log("invoiceDate", invoice.invoiceDate)
+     save({invoice, user})
+  }
 
   return (
+    <div><button onClick={saveInvoice}>Save</button> 
     <Document pdfMode={pdfMode}>
       <Page className="invoice-wrapper" pdfMode={pdfMode}>
         {!pdfMode && <Download data={invoice} />}
-        <button onClick={()=>saveInvoice}>Save</button> 
-
         <View className="flex" pdfMode={pdfMode}>
           <View className="w-50" pdfMode={pdfMode}>
             <EditableInput
@@ -475,6 +475,7 @@ const InvoicePage: FC<Props> = ({ data, pdfMode, saveInvoice }) => {
         </View>
       </Page>
     </Document>
+  </div>
   )
 }
 
