@@ -13,6 +13,7 @@ import Text from './Text'
 import { Font } from '@react-pdf/renderer'
 import Download from './DownloadPDF'
 import format from 'date-fns/format'
+// import { useMoralis, useMoralisQuery, useNewMoralisObject } from 'react-moralis'
 
 Font.register({
   family: 'Nunito',
@@ -25,12 +26,25 @@ Font.register({
 interface Props {
   data?: Invoice
   pdfMode?: boolean
+  saveInvoice?: void
 }
 
-const InvoicePage: FC<Props> = ({ data, pdfMode }) => {
+const InvoicePage: FC<Props> = ({ data, pdfMode, saveInvoice }) => {
+  // const [invoice, setInvoice] = useState<Invoice>({...data})
   const [invoice, setInvoice] = useState<Invoice>(data ? { ...data } : { ...initialInvoice })
   const [subTotal, setSubTotal] = useState<number>()
   const [saleTax, setSaleTax] = useState<number>()
+
+  // const {
+  //   authenticate,
+  //   isAuthenticated,
+  //   isAuthenticating,
+  //   authError,
+  //   logout,
+  //   user,
+  //   isAuthUndefined,
+  // } = useMoralis();
+  // const { isSaving, error, save } = useNewMoralisObject('Invoices');
 
   const dateFormat = 'MMM dd, yyyy'
   const invoiceDate = invoice.invoiceDate !== '' ? new Date(invoice.invoiceDate) : new Date()
@@ -123,10 +137,15 @@ const InvoicePage: FC<Props> = ({ data, pdfMode }) => {
     setSaleTax(saleTax)
   }, [subTotal, invoice.taxLabel])
 
+  //   const saveInvoice = () => {
+  //    save({invoice, user})
+  // }
+
   return (
     <Document pdfMode={pdfMode}>
       <Page className="invoice-wrapper" pdfMode={pdfMode}>
         {!pdfMode && <Download data={invoice} />}
+        <button onClick={()=>saveInvoice}>Save</button> 
 
         <View className="flex" pdfMode={pdfMode}>
           <View className="w-50" pdfMode={pdfMode}>

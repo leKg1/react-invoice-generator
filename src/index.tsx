@@ -3,10 +3,16 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import './scss/main.scss'
 import * as serviceWorker from './serviceWorker'
+import { MoralisProvider } from 'react-moralis';
+
+const appId = ""
+const serverUrl = ""
 
 ReactDOM.render(
   <React.StrictMode>
+     <MoralisProvider appId={appId} serverUrl={serverUrl}>
     <App />
+    </MoralisProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )
