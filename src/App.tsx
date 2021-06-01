@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react'
+import React, { FunctionComponent, useState, useEffect } from 'react'
 import InvoicePage from './components/InvoicePage'
 import { useMoralis, useMoralisQuery, useNewMoralisObject } from 'react-moralis'
 import Head from './Head';
@@ -15,6 +15,7 @@ interface Invoice {
   invoiceTitle: string;
   clientName: string;
   invoiceDate: string;
+  // data: any;
 }
 
 const InvoicesTable: FunctionComponent = () => {
@@ -25,7 +26,7 @@ const InvoicesTable: FunctionComponent = () => {
       <tbody>
         {data.map((d) => (
           <Row
-            // key={i}
+            data={d}
             invoiceNo={d.attributes.invoice.invoiceTitle}
             clientName={d.attributes.invoice.clientName}
             invoiceDate={d.attributes.invoice.invoiceDate}
@@ -37,7 +38,7 @@ const InvoicesTable: FunctionComponent = () => {
 };
 
 function App() {
-  const [invoice, setInvoice] = useState<Invoice>()
+  const [invoice, setInvoice] = useState<any>()
   const {
     authenticate,
     isAuthenticated,
@@ -47,30 +48,37 @@ function App() {
     user,
     isAuthUndefined,
   } = useMoralis();
-  // const { fetch, data, isLoading } = useMoralisQuery("Invoices")
-  // const invoiceNo = "2021-001"
+
   let { invoiceNo } = useParams()
 
-
   const { fetch, data, isLoading } = useMoralisQuery("Invoices",
-    query =>
-      query
-      .equalTo("invoice.invoiceTitle", invoiceNo));
+  query =>
+    query
+    .equalTo("invoice.invoiceTitle", invoiceNo));
   const { isSaving, error, save } = useNewMoralisObject('Invoices');
+  console.log("invoiceNo", invoiceNo)
+  console.log("data",data)
+  console.log("isLoading",isLoading)
+
+  useEffect(() => {
+    setInvoice((data!==undefined && data.length> 0)?data[0].attributes.invoice:undefined)
+    console.log("invoice",invoice)
+}, [invoice]);
 
   const newInvoice = () => {
     setInvoice(undefined)
-    console.log(invoice)
+    console.log("invoice",invoice)
   }
 
   console.log("isAuthenticated", isAuthenticated)
   console.log("invoiceNo", invoiceNo)
-  console.log("dataLength",data.length)
+  // console.log("dataLength",data.length)
   if (data.length > 0 && isAuthenticated) {
-    const _invoices:Invoice[] = data.map((d) => {
-      return d.attributes.invoice;
-    });
-    console.log("data",data)
+    // const _invoices:Invoice[] = data.map((d) => {
+    //   return d.attributes.invoice;
+    // });
+    // console.log("data",data)
+    console.log("invoice",invoice)
     return (
       <div className="app">
         <h1 className="center fs-30">React Invoice Generator</h1>
@@ -79,7 +87,8 @@ function App() {
           <Route path="/:invoiceNo" children={<InvoicePage 
            save={save}
            user={user}
-           data={(data!==undefined && data.length> 0)?data[0].attributes.invoice:undefined} 
+           data={invoice}
+          //  data={(data!==undefined && data.length> 0)?data[0].attributes.invoice:undefined} 
            />} />       
       </div>
     );
@@ -89,6 +98,10 @@ function App() {
   </div>):<div>
     <button onClick={newInvoice}>New Invoice</button>
     <InvoicesTable /> 
+    <InvoicePage 
+           save={save}
+           user={user}
+           data={invoice}/>
     </div>
   }
 }

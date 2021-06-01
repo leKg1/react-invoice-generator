@@ -38,12 +38,12 @@ interface Props {
 }
 
 const InvoicePage: FC<Props> = ({ data, pdfMode, save, user }) => {
-  // let { invoiceNo } = useParams();
   const [invoice, setInvoice] = useState<Invoice>(data ? { ...data } : { ...initialInvoice })
   const [subTotal, setSubTotal] = useState<number>()
   const [saleTax, setSaleTax] = useState<number>()
 
   const dateFormat = 'MMM dd, yyyy'
+  // const invoiceDate = (invoice.invoiceDate !== '' && invoice.invoiceDate !== undefined) ? new Date(invoice.invoiceDate) : new Date()
   const invoiceDate = invoice.invoiceDate !== '' ? new Date(invoice.invoiceDate) : new Date()
   const invoiceDueDate =
     invoice.invoiceDueDate !== ''
@@ -63,8 +63,6 @@ const InvoicePage: FC<Props> = ({ data, pdfMode, save, user }) => {
       setInvoice(newInvoice)
     }
   }
-
-  // console.log("invoiceNo", useParams())
 
   const handleProductLineChange = (index: number, name: keyof ProductLine, value: string) => {
     const productLines = invoice.productLines.map((productLine, i) => {
