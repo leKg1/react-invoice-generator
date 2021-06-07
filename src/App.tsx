@@ -49,29 +49,16 @@ function App() {
     user,
     isAuthUndefined,
   } = useMoralis();
+
   let { invoiceNo } = useParams()
   const [_invoiceNo, set_InvoiceNo] = useState<string | undefined>(invoiceNo)
-  /*
-  const { fetch, data, isLoading } = useMoralisQuery("Invoices",
-  query =>
-    query
-    .equalTo("invoice.invoiceTitle", invoiceNo));
-  const { isSaving, error, save } = useNewMoralisObject('Invoices');
-  console.log("invoiceNo", invoiceNo)
-  console.log("data",data)
-  console.log("isLoading",isLoading) */
+  useEffect(() => {
+    set_InvoiceNo(invoiceNo)
+  }, [_invoiceNo])
 
-    const newInvoice = () => {
+  if (isAuthenticated) {
 
-    }
-
-    useEffect(() => {
-      set_InvoiceNo(invoiceNo)
-    }, [_invoiceNo]) 
-
-    if (isAuthenticated) {
-
-    console.log("rerender App.tsx invoiceNo",invoiceNo)
+    console.log("rerender App.tsx invoiceNo", invoiceNo)
     return (
       <div className="app">
         <h1 className="center fs-30">React Invoice Generator</h1>
@@ -79,19 +66,19 @@ function App() {
         <InvoicesTable />
         <Link to="/" className="btn btn-primary">New Invoice </Link>
 
-          <Route path="/:invoiceNo" children={<InvoicePage 
-           invoiceNo={invoiceNo}
-           user={user}
-          //  data={(data!==undefined && data.length> 0)?data[0].attributes.invoice:undefined} 
-           />} />       
+        <Route path="/:invoiceNo" children={<InvoicePage
+          invoiceNo={invoiceNo}
+          user={user}
+        />} />
       </div>
     );
-  } else { return !isAuthenticated?(<div>
-    <button onClick={() => authenticate()}>Authenticate</button>
+  } else {
+    return !isAuthenticated ? (<div>
+      <button onClick={() => authenticate()}>Authenticate</button>
   Loading...
-  </div>):<div>
-    <Link to="/" className="btn btn-primary">New Invoice </Link>
-    <InvoicesTable /> 
+    </div>) : <div>
+      <Link to="/" className="btn btn-primary">New Invoice </Link>
+      <InvoicesTable />
     </div>
   }
 }

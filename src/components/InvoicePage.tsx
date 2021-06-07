@@ -41,19 +41,17 @@ interface Props {
 
 const InvoicePage: FC<Props> = ({pdfMode, invoiceNo, user }) => {
 
-  //const [_invoiceNo, set_InvoiceNo] = useState<string | undefined>(invoiceNo)
   const [invoice, setInvoice] = useState<Invoice>({...initialInvoice})
-  
-  //const [invoice, setInvoice] = useState<Invoice>(_data ? { ..._data } : { ...initialInvoice })
   const [subTotal, setSubTotal] = useState<number>()
   const [saleTax, setSaleTax] = useState<number>()
 
   const { fetch, data, isLoading } = useMoralisQuery("Invoices",
-  query =>
-    query
-    .equalTo("invoice.invoiceTitle", invoiceNo),
+    query =>
+      query
+        .equalTo("invoice.invoiceTitle", invoiceNo),
     []
-    );
+  );
+
   const ourInvoice = data.length>0?data[0].attributes.invoice:undefined
     useEffect(() => {
         console.log('invoiceNo',invoiceNo)
