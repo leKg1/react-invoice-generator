@@ -4,10 +4,10 @@ import { Invoice } from '../data/types'
 import InvoicePage from './InvoicePage'
 
 interface Props {
-  data: Invoice
+  invoiceNo: string
 }
 
-const Download: FC<Props> = ({ data }) => {
+const Download: FC<Props> = ({ invoiceNo }) => {
   const [show, setShow] = useState<boolean>(false)
 
   useEffect(() => {
@@ -16,16 +16,15 @@ const Download: FC<Props> = ({ data }) => {
     const timeout = setTimeout(() => {
       setShow(true)
     }, 500)
-
     return () => clearTimeout(timeout)
-  }, [data])
+  }, [invoiceNo]) 
 
   return (
     <div className={'download-pdf ' + (!show ? 'loading' : '')} title="Save PDF">
       {show && (
         <PDFDownloadLink
-          document={<InvoicePage pdfMode={true} data={data} />}
-          fileName={`${data.invoiceTitle ? data.invoiceTitle.toLowerCase() : 'invoice'}.pdf`}
+          document={<InvoicePage pdfMode={true} invoiceNo={invoiceNo} />}
+          fileName={`${invoiceNo ? invoiceNo.toLowerCase() : 'invoice'}.pdf`}
           aria-label="Save PDF"
         ></PDFDownloadLink>
       )}

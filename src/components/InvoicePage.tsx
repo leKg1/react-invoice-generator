@@ -11,7 +11,7 @@ import Page from './Page'
 import View from './View'
 import Text from './Text'
 import { Font } from '@react-pdf/renderer'
-import Download from './DownloadPDF'
+//import Download from './DownloadPDF'
 import format from 'date-fns/format'
 import {
   BrowserRouter as Router,
@@ -20,6 +20,7 @@ import {
   Link,
   useParams
 } from "react-router-dom";
+import { useMoralis, useMoralisQuery, useNewMoralisObject } from 'react-moralis'
 
 
 Font.register({
@@ -31,19 +32,43 @@ Font.register({
 })
 
 interface Props {
-  data?: Invoice
+  //_data?: Invoice
   pdfMode?: boolean
-  save?: any
+  invoiceNo?: string
+ // save?: any
   user?: any
 }
 
-const InvoicePage: FC<Props> = ({ data, pdfMode, save, user }) => {
-  const [invoice, setInvoice] = useState<Invoice>(data ? { ...data } : { ...initialInvoice })
+const InvoicePage: FC<Props> = ({pdfMode, invoiceNo, user }) => {
+
+  //const [_invoiceNo, set_InvoiceNo] = useState<string | undefined>(invoiceNo)
+  const [invoice, setInvoice] = useState<Invoice>({...initialInvoice})
+  
+  //const [invoice, setInvoice] = useState<Invoice>(_data ? { ..._data } : { ...initialInvoice })
   const [subTotal, setSubTotal] = useState<number>()
   const [saleTax, setSaleTax] = useState<number>()
 
+  const { fetch, data, isLoading } = useMoralisQuery("Invoices",
+  query =>
+    query
+    .equalTo("invoice.invoiceTitle", invoiceNo),
+    []
+    );
+  const ourInvoice = data.length>0?data[0].attributes.invoice:undefined
+    useEffect(() => {
+        console.log('invoiceNo',invoiceNo)
+        console.log('data',data)
+        if(data.length>0){
+          console.log('data',data)
+          console.log('current invoiceNo in data:', data[0].attributes.invoice.invoiceTitle)
+          //setInvoice(data[0].attributes.invoice)
+          setInvoice({ ...data[0].attributes.invoice})
+        }
+ 
+    },[ourInvoice]) 
+
   const dateFormat = 'MMM dd, yyyy'
-  // const invoiceDate = (invoice.invoiceDate !== '' && invoice.invoiceDate !== undefined) ? new Date(invoice.invoiceDate) : new Date()
+  //const invoiceDate = (invoice.invoiceDate !== '' && invoice.invoiceDate !== undefined) ? new Date(invoice.invoiceDate) : new Date()
   const invoiceDate = invoice.invoiceDate !== '' ? new Date(invoice.invoiceDate) : new Date()
   const invoiceDueDate =
     invoice.invoiceDueDate !== ''
@@ -137,14 +162,14 @@ const InvoicePage: FC<Props> = ({ data, pdfMode, save, user }) => {
 
     const saveInvoice = () => {
       console.log("invoiceDate", invoice.invoiceDate)
-     save({invoice, user})
+     //save({invoice, user})
   }
-
+  console.log("rerender InvoicePage",invoiceNo)
   return (
     <div><button onClick={saveInvoice}>Save</button> 
     <Document pdfMode={pdfMode}>
       <Page className="invoice-wrapper" pdfMode={pdfMode}>
-        {!pdfMode && <Download data={invoice} />}
+     
         <View className="flex" pdfMode={pdfMode}>
           <View className="w-50" pdfMode={pdfMode}>
             <EditableInput

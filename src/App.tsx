@@ -38,6 +38,7 @@ const InvoicesTable: FunctionComponent = () => {
 };
 
 function App() {
+
   const [invoice, setInvoice] = useState<any>()
   const {
     authenticate,
@@ -48,9 +49,9 @@ function App() {
     user,
     isAuthUndefined,
   } = useMoralis();
-
   let { invoiceNo } = useParams()
-
+  const [_invoiceNo, set_InvoiceNo] = useState<string | undefined>(invoiceNo)
+  /*
   const { fetch, data, isLoading } = useMoralisQuery("Invoices",
   query =>
     query
@@ -58,36 +59,29 @@ function App() {
   const { isSaving, error, save } = useNewMoralisObject('Invoices');
   console.log("invoiceNo", invoiceNo)
   console.log("data",data)
-  console.log("isLoading",isLoading)
+  console.log("isLoading",isLoading) */
 
-  useEffect(() => {
-    setInvoice((data!==undefined && data.length> 0)?data[0].attributes.invoice:undefined)
-    console.log("invoice",invoice)
-}, [invoice]);
+    const newInvoice = () => {
 
-  const newInvoice = () => {
-    setInvoice(undefined)
-    console.log("invoice",invoice)
-  }
+    }
 
-  console.log("isAuthenticated", isAuthenticated)
-  console.log("invoiceNo", invoiceNo)
-  // console.log("dataLength",data.length)
-  if (data.length > 0 && isAuthenticated) {
-    // const _invoices:Invoice[] = data.map((d) => {
-    //   return d.attributes.invoice;
-    // });
-    // console.log("data",data)
-    console.log("invoice",invoice)
+    useEffect(() => {
+      set_InvoiceNo(invoiceNo)
+    }, [_invoiceNo]) 
+
+    if (isAuthenticated) {
+
+    console.log("rerender App.tsx invoiceNo",invoiceNo)
     return (
       <div className="app">
         <h1 className="center fs-30">React Invoice Generator</h1>
         <button onClick={() => logout()}>Logout</button>
         <InvoicesTable />
+        <Link to="/" className="btn btn-primary">New Invoice </Link>
+
           <Route path="/:invoiceNo" children={<InvoicePage 
-           save={save}
+           invoiceNo={invoiceNo}
            user={user}
-           data={invoice}
           //  data={(data!==undefined && data.length> 0)?data[0].attributes.invoice:undefined} 
            />} />       
       </div>
@@ -96,12 +90,8 @@ function App() {
     <button onClick={() => authenticate()}>Authenticate</button>
   Loading...
   </div>):<div>
-    <button onClick={newInvoice}>New Invoice</button>
+    <Link to="/" className="btn btn-primary">New Invoice </Link>
     <InvoicesTable /> 
-    <InvoicePage 
-           save={save}
-           user={user}
-           data={invoice}/>
     </div>
   }
 }
