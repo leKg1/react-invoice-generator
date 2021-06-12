@@ -34,36 +34,34 @@ Font.register({
 interface Props {
   //_data?: Invoice
   pdfMode?: boolean
-  invoiceNo?: string
+ // invoiceNo?: string
  // save?: any
   user?: any
 }
 
-const InvoicePage: FC<Props> = ({pdfMode, invoiceNo, user }) => {
+const InvoicePage: FC<Props> = ({pdfMode}) => {
+
 
   const [invoice, setInvoice] = useState<Invoice>({...initialInvoice})
   const [subTotal, setSubTotal] = useState<number>()
   const [saleTax, setSaleTax] = useState<number>()
+  
+  let { invoiceNo } = useParams()
 
   const { fetch, data, isLoading } = useMoralisQuery("Invoices",
-    query =>
-      query
-        .equalTo("invoice.invoiceTitle", invoiceNo),
-    []
-  );
+    query => query.equalTo("invoice.invoiceTitle", invoiceNo), [invoiceNo], {live: true}
+  )
 
-  const ourInvoice = data.length>0?data[0].attributes.invoice:undefined
-    useEffect(() => {
-        console.log('invoiceNo',invoiceNo)
-        console.log('data',data)
-        if(data.length>0){
-          console.log('data',data)
-          console.log('current invoiceNo in data:', data[0].attributes.invoice.invoiceTitle)
-          //setInvoice(data[0].attributes.invoice)
-          setInvoice({ ...data[0].attributes.invoice})
-        }
- 
-    },[ourInvoice]) 
+
+  console.log('invoiceNo in url:',invoiceNo)
+  console.log('invoice in data',data.length>0?data[0].attributes.invoice.invoiceTitle:'data empty')
+
+  useEffect(() => {
+      if(data.length>0){
+        setInvoice(data[0].attributes.invoice)
+      }
+  },[data]) 
+  console.log('rerendering... ')
 
   const dateFormat = 'MMM dd, yyyy'
   //const invoiceDate = (invoice.invoiceDate !== '' && invoice.invoiceDate !== undefined) ? new Date(invoice.invoiceDate) : new Date()
@@ -158,11 +156,11 @@ const InvoicePage: FC<Props> = ({pdfMode, invoiceNo, user }) => {
     setSaleTax(saleTax)
   }, [subTotal, invoice.taxLabel])
 
-    const saveInvoice = () => {
+  const saveInvoice = () => {
       console.log("invoiceDate", invoice.invoiceDate)
      //save({invoice, user})
   }
-  console.log("rerender InvoicePage",invoiceNo)
+
   return (
     <div><button onClick={saveInvoice}>Save</button> 
     <Document pdfMode={pdfMode}>

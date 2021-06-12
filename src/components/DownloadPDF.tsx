@@ -12,7 +12,6 @@ const Download: FC<Props> = ({ invoiceNo }) => {
 
   useEffect(() => {
     setShow(false)
-
     const timeout = setTimeout(() => {
       setShow(true)
     }, 500)
@@ -23,7 +22,7 @@ const Download: FC<Props> = ({ invoiceNo }) => {
     <div className={'download-pdf ' + (!show ? 'loading' : '')} title="Save PDF">
       {show && (
         <PDFDownloadLink
-          document={<InvoicePage pdfMode={true} invoiceNo={invoiceNo} />}
+          document={<InvoicePage pdfMode={true} />}
           fileName={`${invoiceNo ? invoiceNo.toLowerCase() : 'invoice'}.pdf`}
           aria-label="Save PDF"
         ></PDFDownloadLink>
