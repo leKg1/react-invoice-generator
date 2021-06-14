@@ -7,6 +7,7 @@ export const initialProductLine: ProductLine = {
 }
 
 export const initialInvoice: Invoice = {
+  tokenAddress: '',
   title: 'INVOICE',
   companyName: '',
   name: '',
@@ -17,7 +18,7 @@ export const initialInvoice: Invoice = {
   clientName: '',
   clientAddress: '',
   clientAddress2: '',
-  clientCountry: 'United States',
+  clientCountry: 'India',
   invoiceTitleLabel: 'Invoice#',
   invoiceTitle: '',
   invoiceDateLabel: 'Invoice Date',

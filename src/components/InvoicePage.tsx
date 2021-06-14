@@ -1,4 +1,13 @@
 import React, { FC, useState, useEffect } from 'react'
+import {
+  Input,
+  Table,
+  Tbody,
+  Tr,
+  Td,
+  Button
+} from "@chakra-ui/react";
+
 import { Invoice, ProductLine } from '../data/types'
 import { initialInvoice, initialProductLine } from '../data/initialData'
 import EditableInput from './EditableInput'
@@ -11,16 +20,13 @@ import Page from './Page'
 import View from './View'
 import Text from './Text'
 import { Font } from '@react-pdf/renderer'
-//import Download from './DownloadPDF'
+import Download from './DownloadPDF'
 import format from 'date-fns/format'
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
   useParams
 } from "react-router-dom";
 import { useMoralis, useMoralisQuery, useNewMoralisObject } from 'react-moralis'
+// import Moralis from 'moralis';
 
 
 Font.register({
@@ -40,20 +46,48 @@ interface Props {
 }
 
 const InvoicePage: FC<Props> = ({pdfMode}) => {
-
+  
 
   const [invoice, setInvoice] = useState<Invoice>({...initialInvoice})
   const [subTotal, setSubTotal] = useState<number>()
   const [saleTax, setSaleTax] = useState<number>()
   
-  const { invoiceNo } = useParams<{ invoiceNo: string }>();
+  const { invoiceNo, tokenAddress } = useParams<{ invoiceNo: string, tokenAddress: string }>();
+  
   useParams<{ sumParams: string }>();
-  const { fetch, data, isLoading } = useMoralisQuery("Invoices",
-    query => query.equalTo("invoice.invoiceTitle", invoiceNo), [invoiceNo], {live: true}
-  )
+  const { user } = useMoralis();
+  const { isSaving, error, save } = useNewMoralisObject('Invoices');
 
+  //if(invoiceNo!==undefined)  ourQuery => query.equalTo("invoice.invoiceTitle", invoiceNo) //, [invoiceNo], {live: true})
+  
+  // let invoiceQuery = (query :any) => {
+  //   query.equalTo("invoice.invoiceTitle", invoiceNo)
+  // }
 
-  console.log('invoiceNo in url:',invoiceNo)
+  // let tokenAddressQuery = () => {
+  //   // const query = new Moralis.Query("Invoices");
+  //   query.equalTo("invoice.invoiceTitle", invoiceNo).
+  //   query.equalTo("invoice.tokenAddress", tokenAddress).
+  //   console.log('token')
+  //   return query
+  // }
+  // let ourQuery
+  // let updateField 
+  // if( invoiceNo!==undefined){
+  //   ourQuery = invoiceQuery
+  //   updateField = [invoiceNo]
+  //   console.log('invoiceQuery')
+  // } else {
+  //   ourQuery = tokenAddressQuery
+  //   updateField = [tokenAddress]
+  //   console.log('tokenAddressQuery')
+  // }
+  
+  const { data, isLoading } = useMoralisQuery("Invoices",query => query
+  .equalTo("invoice.invoiceTitle", invoiceNo)
+  .equalTo("invoice.tokenAddress", tokenAddress), [tokenAddress], {live: true})
+  console.log('tokenAddress in url:',tokenAddress)
+  console.log('invoiceNo in url:',invoiceNo)  
   console.log('invoice in data',data.length>0?data[0].attributes.invoice.invoiceTitle:'data empty')
 
   useEffect(() => {
@@ -61,10 +95,8 @@ const InvoicePage: FC<Props> = ({pdfMode}) => {
         setInvoice(data[0].attributes.invoice)
       }
   },[data]) 
-  console.log('rerendering... ')
 
   const dateFormat = 'MMM dd, yyyy'
-  //const invoiceDate = (invoice.invoiceDate !== '' && invoice.invoiceDate !== undefined) ? new Date(invoice.invoiceDate) : new Date()
   const invoiceDate = invoice.invoiceDate !== '' ? new Date(invoice.invoiceDate) : new Date()
   const invoiceDueDate =
     invoice.invoiceDueDate !== ''
@@ -116,13 +148,11 @@ const InvoicePage: FC<Props> = ({pdfMode}) => {
 
   const handleRemove = (i: number) => {
     const productLines = invoice.productLines.filter((productLine, index) => index !== i)
-
     setInvoice({ ...invoice, productLines })
   }
 
   const handleAdd = () => {
     const productLines = [...invoice.productLines, { ...initialProductLine }]
-
     setInvoice({ ...invoice, productLines })
   }
 
@@ -158,11 +188,12 @@ const InvoicePage: FC<Props> = ({pdfMode}) => {
 
   const saveInvoice = () => {
       console.log("invoiceDate", invoice.invoiceDate)
-     //save({invoice, user})
+      invoice.tokenAddress = tokenAddress
+     save({invoice, user})
   }
 
   return (
-    <div><button onClick={saveInvoice}>Save</button> 
+    <div><Button colorScheme="purple" onClick={saveInvoice}>Save</Button> 
     <Document pdfMode={pdfMode}>
       <Page className="invoice-wrapper" pdfMode={pdfMode}>
      

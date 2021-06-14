@@ -7,6 +7,7 @@ export interface ProductLine {
 }
 
 export interface Invoice {
+  tokenAddress: string
   title: string
   companyName: string
   name: string
