@@ -46,8 +46,8 @@ const InvoicePage: FC<Props> = ({pdfMode}) => {
   const [subTotal, setSubTotal] = useState<number>()
   const [saleTax, setSaleTax] = useState<number>()
   
-  let { invoiceNo } = useParams()
-
+  const { invoiceNo } = useParams<{ invoiceNo: string }>();
+  useParams<{ sumParams: string }>();
   const { fetch, data, isLoading } = useMoralisQuery("Invoices",
     query => query.equalTo("invoice.invoiceTitle", invoiceNo), [invoiceNo], {live: true}
   )
