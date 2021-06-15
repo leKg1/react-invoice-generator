@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState, useEffect } from 'react'
 import { Button, Heading} from "@chakra-ui/react"
 import { useMoralis } from 'react-moralis'
 
-import SmartContractList from './components/SmartContracts';
+import SmartContractList from './components/SmartContractList';
 import InvoiceTable from './components/InvoiceTable';
 import DeploySmartContract from './components/DeploySmartContract';
 import InvoicePage from './components/InvoicePage'
