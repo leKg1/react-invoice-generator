@@ -1,18 +1,23 @@
 # DeLi (Decentralized Live)
 
 ### TODOs
+- (GK) display totalStakes, ourStake in contract list
+- (NK) click & display invoice
+- (GK) enable delete invoice in Invoice Table again (typescript problem)
+- (NK) save after updating an invoice 
 - (GK) add a search form to contract list
 - (GK) add a search form to invoice list
+- (GK) when registering or deploying smart contract go back to contract list
 - (NK) test / fix production lines in InvoicePage (remove wrong ones)
-- (NK) click & display invoice
 - (NK) fix invoice date issue
-- (GK) deploy on matic 
+
+
+### 3rd party provider todos
+- (GK) deploy on matic
 - (GK/NK) use 1inch to swap our (DeLi) token on site https://1inch.io/
 - (GK) deploy to second blockchain (moonbeam)
 
 ### missing functions
-- (NK) 1% to parent token   
-- (GK) display totalStakes, ourStake in contract list
 - (GK)  write invoice in € or $ or BTC or ETC display current value in another currency via chainlink price feed 
 - send invoice by email
 - show, mark and filter paid and unpaid invoices 
@@ -26,8 +31,11 @@
 ### smart contracts
 #### Staking Token
 - (GK) create updatable smart contract
-- (GK) add USDT, xDAI and other stable tokens to smart contract (should be able to send)
 - (GK) rename FreelanceToken to DeLive DeLi
+- (NK) distribute invoice payments to stakers (x%)
+- (NK) 1% to parent token 
+- (GK) add USDT, xDAI and other stable tokens to smart contract (should be able to send)
+
 
 #### Invoice Token
 - (NK) create Invoice SmartContract with InvoiceNo, ipfs cid
