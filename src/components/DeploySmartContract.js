@@ -15,16 +15,20 @@ import { useMoralis,useNewMoralisObject } from "react-moralis";
 import { abi } from "../abi"
 import { bytecode } from '../bytecode';
 
-const DeploySmartContract = () => {
+const DeploySmartContract = (props) => {
+  const MODE_LIST_CONTRACTS = "list_contracts"
   const [tokenName, setTokenName] = useState('')
   const [tokenSymbol, setTokenSymbol] = useState('')
   const [tokenInitialSupply, setTokenInitialSupply] = useState(0)
 
   const [smartContractAddress, setSmartContractAddress] = useState("nicos addresse");
 
+  const [mode, setMode] = useState("")
+
   const { user } = useMoralis();
   const { isSaving, error, save } = useNewMoralisObject('FreelanceToken');
   let history = useHistory();
+  const changeMode = (mode) => setMode(mode)
 
   const registerSmartContract = () => {
         console.log('registerSmartContract',smartContractAddress)
@@ -50,13 +54,15 @@ const DeploySmartContract = () => {
         alert("successfully deployed new contract!", smartContractAddress); //TODO please beautify with Chakra
         save({smartContractAddress, user})
         history.push("/"+smartContractAddress);
+        changeMode(MODE_LIST_CONTRACTS)
         
       } catch (error) {
         alert(error);
       }
   }
 
-  return (
+  if(mode===MODE_LIST_CONTRACTS) return props.displayContractList()
+  else return (
     <div>
       <Table variant="simple">
         <Tbody>
