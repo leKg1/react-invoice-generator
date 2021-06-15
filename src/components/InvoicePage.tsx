@@ -40,54 +40,29 @@ Font.register({
 interface Props {
   //_data?: Invoice
   pdfMode?: boolean
- // invoiceNo?: string
+  tokenAddress: string
+ invoiceNo?: string
  // save?: any
   user?: any
 }
 
-const InvoicePage: FC<Props> = ({pdfMode}) => {
-  
+const InvoicePage: FC<Props> = ({pdfMode,tokenAddress,invoiceNo}) => {
+
 
   const [invoice, setInvoice] = useState<Invoice>({...initialInvoice})
   const [subTotal, setSubTotal] = useState<number>()
   const [saleTax, setSaleTax] = useState<number>()
   
-  const { invoiceNo, tokenAddress } = useParams<{ invoiceNo: string, tokenAddress: string }>();
+  // const { invoiceNo, tokenAddress } = useParams<{ invoiceNo: string, tokenAddress: string }>();
+  // const { tokenAddress } = useParams<{ tokenAddress: string }>();
   
-  useParams<{ sumParams: string }>();
   const { user } = useMoralis();
-  const { isSaving, error, save } = useNewMoralisObject('Invoices');
-
-  //if(invoiceNo!==undefined)  ourQuery => query.equalTo("invoice.invoiceTitle", invoiceNo) //, [invoiceNo], {live: true})
+  const { isSaving, error, save } = useNewMoralisObject('Invoices')
   
-  // let invoiceQuery = (query :any) => {
-  //   query.equalTo("invoice.invoiceTitle", invoiceNo)
-  // }
+  const { data, isLoading } = useMoralisQuery("Invoices") //,query => query
+  // .equalTo("invoice.invoiceTitle", invoiceNo)
+  // .equalTo("invoice.tokenAddress", tokenAddress), [tokenAddress], {live: true})
 
-  // let tokenAddressQuery = () => {
-  //   // const query = new Moralis.Query("Invoices");
-  //   query.equalTo("invoice.invoiceTitle", invoiceNo).
-  //   query.equalTo("invoice.tokenAddress", tokenAddress).
-  //   console.log('token')
-  //   return query
-  // }
-  // let ourQuery
-  // let updateField 
-  // if( invoiceNo!==undefined){
-  //   ourQuery = invoiceQuery
-  //   updateField = [invoiceNo]
-  //   console.log('invoiceQuery')
-  // } else {
-  //   ourQuery = tokenAddressQuery
-  //   updateField = [tokenAddress]
-  //   console.log('tokenAddressQuery')
-  // }
-  
-  const { data, isLoading } = useMoralisQuery("Invoices",query => query
-  .equalTo("invoice.invoiceTitle", invoiceNo)
-  .equalTo("invoice.tokenAddress", tokenAddress), [tokenAddress], {live: true})
-  console.log('tokenAddress in url:',tokenAddress)
-  console.log('invoiceNo in url:',invoiceNo)  
   console.log('invoice in data',data.length>0?data[0].attributes.invoice.invoiceTitle:'data empty')
 
   useEffect(() => {
@@ -194,7 +169,8 @@ const InvoicePage: FC<Props> = ({pdfMode}) => {
 
   return (
     <div><Button colorScheme="purple" onClick={saveInvoice}>Save</Button> 
-    <Document pdfMode={pdfMode}>
+    <Document pdfMode={pdfMode} >
+    {/* {!pdfMode && <Download  tokenAddress={tokenAddress}/>} */}
       <Page className="invoice-wrapper" pdfMode={pdfMode}>
      
         <View className="flex" pdfMode={pdfMode}>

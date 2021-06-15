@@ -27,8 +27,6 @@ const theme = extendTheme({
   },
 })
 
-
-
 ReactDOM.render(
   <React.StrictMode>
     <MoralisProvider appId={appId} serverUrl={serverUrl}>
@@ -38,7 +36,7 @@ ReactDOM.render(
             <Route exact path="/" children={<Landing />} />
             <Route path="/app" children={<App />} />
             <Route path="/:tokenAddress" children={<App />} />
-            <Route path="/:tokenAddress/:invoiceNo" children={<App />} />
+            {/* <Route path="/:tokenAddress/:invoiceNo" children={<App />} /> */}
         </Switch>
       </Router>
       </ChakraProvider>

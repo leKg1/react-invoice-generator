@@ -45,12 +45,12 @@ const DeploySmartContract = () => {
         .send({from: account1,gas: 4000000,});
         console.log(contract)
         console.log(contract.options)
-        setSmartContractAddress(contract.options.addresss)
+        setSmartContractAddress(contract.options.address)
         
         alert("successfully deployed new contract!", smartContractAddress); //TODO please beautify with Chakra
-        save({smartContractAddress, user}).then(()=>{
-          history.push("/"+smartContractAddress);
-        })
+        save({smartContractAddress, user})
+        history.push("/"+smartContractAddress);
+        
       } catch (error) {
         alert(error);
       }

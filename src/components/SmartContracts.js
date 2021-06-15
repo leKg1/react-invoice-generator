@@ -10,10 +10,10 @@ import {
     Td,
   } from "@chakra-ui/react";
 
-import { Link,} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { abi } from "../abi"
 
-const SmartContracts =  () => {
+const SmartContractList =  () => {
   const web3Lib = new Moralis.Web3();
   const [smartContractList, setSmartContractList] = useState([]);
   const limit = 10
@@ -83,4 +83,4 @@ const SmartContracts =  () => {
     </Table>
   )
 }
-export default SmartContracts
+export default SmartContractList

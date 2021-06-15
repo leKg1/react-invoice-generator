@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState, useEffect } from 'react'
 import { Button, Heading} from "@chakra-ui/react"
 import { useMoralis } from 'react-moralis'
 
-import SmartContracts from './components/SmartContracts';
+import SmartContractList from './components/SmartContracts';
 import InvoiceTable from './components/InvoiceTable';
 import DeploySmartContract from './components/DeploySmartContract';
 import InvoicePage from './components/InvoicePage'
@@ -35,7 +35,8 @@ function App() {
   const changeMode = (mode: string) => setMode(mode)
   const changeInvoiceMode = (mode: string) => setInvoiceMode(mode)
   const { invoiceNo, tokenAddress } = useParams<{ invoiceNo: string, tokenAddress: string }>();
-
+  // console.log('tokenAddress in url:',tokenAddress)
+  // console.log('invoiceNo in url:',invoiceNo)  
   const LogoutButton = () => {return  <Button colorScheme="teal" onClick={() => logout()}>Logout</Button>}
   const displayContractList = () => {
     return (
@@ -44,15 +45,15 @@ function App() {
         <Button colorScheme="purple" onClick={() => changeMode(MODE_NEW_CONTRACT)}>Deploy Token Project</Button>
         <p>&nbsp;</p>
         <Heading textAlign="center" color="gray.700">Contracts</Heading> 
-        <SmartContracts />
+        <SmartContractList />
         <p>&nbsp;</p>
         <Heading textAlign="center" color="gray.700">Invoices</Heading>
         <p>&nbsp;</p>
         {invoiceMode === MODE_LIST_INVOICES && <Button colorScheme="purple" onClick={() => changeInvoiceMode(MODE_EDIT_INVOICES)}>New Invoice</Button>}
         {invoiceMode === MODE_EDIT_INVOICES && <Button colorScheme="purple" onClick={() => changeInvoiceMode(MODE_LIST_INVOICES)}>List Invoices</Button>}
-      
-        {invoiceMode === MODE_LIST_INVOICES && <InvoiceTable tokenAddress={tokenAddress} />}
-        {invoiceMode === MODE_EDIT_INVOICES &&  <div className="app"><h1 className="center fs-30">React Invoice Generator</h1><InvoicePage /></div>}
+      {/* //editInvoiceFunc={() => changeInvoiceMode(MODE_EDIT_INVOICES) */}
+        {invoiceMode === MODE_LIST_INVOICES && <InvoiceTable tokenAddress={tokenAddress}  />}
+        {invoiceMode === MODE_EDIT_INVOICES &&  <div className="app"><h1 className="center fs-30">React Invoice Generator</h1><InvoicePage tokenAddress={tokenAddress}/></div>}
       </div>
     )
   } 
