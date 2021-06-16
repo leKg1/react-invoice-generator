@@ -34,8 +34,10 @@ ReactDOM.render(
       <Router>
         <Switch>
             <Route exact path="/" children={<Landing />} />
-            <Route path="/app" children={<App />} />
-            <Route path="/:tokenAddress" children={<App />} />
+            <Route exact path="/contracts" children={<App />} />
+            <Route exact path="/invoices" children={<App />} />
+            <Route path="/contracts/:tokenAddress" children={<App />} />
+            <Route path="/invoices/:invoiceNo" children={<App />} />
             {/* <Route path="/:tokenAddress/:invoiceNo" children={<App />} /> */}
         </Switch>
       </Router>

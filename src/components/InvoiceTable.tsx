@@ -6,9 +6,13 @@ import {
   Tbody,
   Tr,
   Td,
-  Button
+  Button,
+  Input,
+  InputGroup,
+  InputLeftElement
 } from "@chakra-ui/react";
 import Head from './Head';
+import { SearchIcon } from '@chakra-ui/icons'
 
 interface Props {
   tokenAddress: string
@@ -27,17 +31,28 @@ const InvoicesTable: FunctionComponent<Props> = ({ tokenAddress }) => {
     const invoice = d.attributes.invoice
     return (
       <Tr key={d.id}>
-        <Td><Link to={"/" + tokenAddress + "/" + d.id} >{invoice.invoiceTitle}</Link></Td>
-        <Td><Link to={"/" + tokenAddress + "/" + d.id}>{invoice.companyName}</Link></Td>
-        <Td><Link to={"/" + tokenAddress + "/" + d.id}>{invoice.clientName}</Link></Td>
-        <Td><Link to={"/" + tokenAddress + "/" + d.id}>{invoice.invoiceDate}</Link></Td>
-        {/* <Button onClick={ deleteInvoice(d)}>Delete</Button> */}
+        <Td><Link to={"/invoices/" + invoice.invoiceTitle} >{invoice.invoiceTitle}</Link></Td>
+        <Td><Link to={"/invoices/" + invoice.invoiceTitle}>{invoice.companyName}</Link></Td>
+        <Td><Link to={"/invoices/" + invoice.invoiceTitle}>{invoice.clientName}</Link></Td>
+        <Td><Link to={"/invoices/" + invoice.invoiceTitle}>{invoice.invoiceDate}</Link></Td>
+        <Button onClick={()=>deleteInvoice(d)}>Delete</Button>
       </Tr>
     )
   })
 
   return (
     <div>
+      <InputGroup>
+    <InputLeftElement
+      pointerEvents="none"
+      color="gray.300"
+      fontSize="1.2em"
+      >
+      <SearchIcon color="green.500" />
+      </InputLeftElement>
+    
+    <Input placeholder="Search the invoices" />
+  </InputGroup>
       <Table>
         <Head />
         <Tbody>

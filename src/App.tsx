@@ -23,8 +23,8 @@ interface Invoice {
 }
 
 function App() {
-  const MODE_NEW_CONTRACT = "new_conract"
-  const MODE_LIST_CONTRACTS = "list_conrtracts"
+  const MODE_NEW_CONTRACT = "new_contract"
+  const MODE_LIST_CONTRACTS = "list_contracts"
   const MODE_EDIT_INVOICES = "edit_invoices"
   const MODE_LIST_INVOICES = "list_invoices"
 
@@ -35,7 +35,7 @@ function App() {
   const changeMode = (mode: string) => setMode(mode)
   const changeInvoiceMode = (mode: string) => setInvoiceMode(mode)
   const { invoiceNo, tokenAddress } = useParams<{ invoiceNo: string, tokenAddress: string }>();
-  // console.log('tokenAddress in url:',tokenAddress)
+  console.log('tokenAddress in url:',tokenAddress)
   // console.log('invoiceNo in url:',invoiceNo)  
   const LogoutButton = () => {return  <Button colorScheme="teal" onClick={() => logout()}>Logout</Button>}
   const displayContractList = () => {
@@ -51,8 +51,9 @@ function App() {
         <p>&nbsp;</p>
         {invoiceMode === MODE_LIST_INVOICES && <Button colorScheme="purple" onClick={() => changeInvoiceMode(MODE_EDIT_INVOICES)}>New Invoice</Button>}
         {invoiceMode === MODE_EDIT_INVOICES && <Button colorScheme="purple" onClick={() => changeInvoiceMode(MODE_LIST_INVOICES)}>List Invoices</Button>}
+        <p>&nbsp;</p>
       {/* //editInvoiceFunc={() => changeInvoiceMode(MODE_EDIT_INVOICES) */}
-        {invoiceMode === MODE_LIST_INVOICES && <InvoiceTable tokenAddress={tokenAddress}  />}
+        {invoiceMode === MODE_LIST_INVOICES && <InvoiceTable tokenAddress={tokenAddress}/>}
         {invoiceMode === MODE_EDIT_INVOICES &&  <div className="app"><h1 className="center fs-30">React Invoice Generator</h1><InvoicePage tokenAddress={tokenAddress}/></div>}
       </div>
     )

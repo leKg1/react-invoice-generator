@@ -56,7 +56,7 @@ const DeploySmartContract = () => {
       }
   }
 
-  return (
+ return (
     <div>
       <Table variant="simple">
         <Tbody>
