@@ -12,7 +12,8 @@ import {
   Switch,
   Route,
   Link,
-  useParams
+  useParams,
+  useHistory
 } from "react-router-dom";
 
 interface Invoice {
@@ -30,13 +31,26 @@ function App() {
 
   const [mode, setMode] = useState(MODE_LIST_CONTRACTS)
   const [invoiceMode, setInvoiceMode] = useState(MODE_LIST_INVOICES)
+  const [contractAddress, setContractAddress] = useState("")
 
   const { authenticate, isAuthenticated, isAuthenticating, logout, } = useMoralis();
   const changeMode = (mode: string) => setMode(mode)
   const changeInvoiceMode = (mode: string) => setInvoiceMode(mode)
   const { invoiceNo, tokenAddress } = useParams<{ invoiceNo: string, tokenAddress: string }>();
   console.log('tokenAddress in url:',tokenAddress)
-  // console.log('invoiceNo in url:',invoiceNo)  
+  console.log('invoiceNo in url:',invoiceNo) 
+
+  const history = useHistory();
+  
+  useEffect(() => {
+    if(tokenAddress!==undefined)setContractAddress(tokenAddress)
+  }, [tokenAddress])
+  console.log('contractAddress in url:',contractAddress)
+
+  useEffect(() => {
+    invoiceNo?changeInvoiceMode(MODE_EDIT_INVOICES):changeInvoiceMode(MODE_LIST_INVOICES)
+  }, [invoiceNo])
+  
   const LogoutButton = () => {return  <Button colorScheme="teal" onClick={() => logout()}>Logout</Button>}
   const displayContractList = () => {
     return (
@@ -50,7 +64,10 @@ function App() {
         <Heading textAlign="center" color="gray.700">Invoices</Heading>
         <p>&nbsp;</p>
         {invoiceMode === MODE_LIST_INVOICES && <Button colorScheme="purple" onClick={() => changeInvoiceMode(MODE_EDIT_INVOICES)}>New Invoice</Button>}
-        {invoiceMode === MODE_EDIT_INVOICES && <Button colorScheme="purple" onClick={() => changeInvoiceMode(MODE_LIST_INVOICES)}>List Invoices</Button>}
+        {invoiceMode === MODE_EDIT_INVOICES && <Button colorScheme="purple" onClick={() => {
+          changeInvoiceMode(MODE_LIST_INVOICES)
+          history.push(`/contracts/${contractAddress}`)
+          }}>List Invoices</Button>}
         <p>&nbsp;</p>
       {/* //editInvoiceFunc={() => changeInvoiceMode(MODE_EDIT_INVOICES) */}
         {invoiceMode === MODE_LIST_INVOICES && <InvoiceTable tokenAddress={tokenAddress}/>}
