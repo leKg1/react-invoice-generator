@@ -38,11 +38,9 @@ Font.register({
 })
 
 interface Props {
-  //_data?: Invoice
   pdfMode?: boolean
   tokenAddress: string
- invoiceNo?: string
- // save?: any
+  invoiceNo?: string
   user?: any
 }
 
@@ -59,9 +57,8 @@ const InvoicePage: FC<Props> = ({pdfMode,tokenAddress,invoiceNo}) => {
   const { user } = useMoralis();
   const { isSaving, error, save } = useNewMoralisObject('Invoices')
   
-  const { data, isLoading } = useMoralisQuery("Invoices") //,query => query
-  // .equalTo("invoice.invoiceTitle", invoiceNo)
-  // .equalTo("invoice.tokenAddress", tokenAddress), [tokenAddress], {live: true})
+  const { data, isLoading } = useMoralisQuery("Invoices",query => query
+  .equalTo("invoice.invoiceTitle", invoiceNo,[invoiceNo], {live: true}))
 
   console.log('invoice in data',data.length>0?data[0].attributes.invoice.invoiceTitle:'data empty')
 

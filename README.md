@@ -1,22 +1,20 @@
 # DeLi (Decentralized Live)
 
 ### TODOs
-- (GK) Bug if clicking on List Invoices when in InvoicePage it should jump back to the correct contract
-- (GK) click & display invoice
-- (GK) SmartContract which I clicked should have a different row color 
-- (GK) Bug I should not see the same contracts as you see
+- (GK) write invoice in € or $ or BTC or ETC display current value in another currency via chainlink price feed 
+- (GK) when registering or deploying smart contract go back to contract list
 - (GK) App starts always with wrong url
 - (GK) App should ask to connect with the correct blockchain (matic, ethereum, etc.) 
-- (GK) display totalStakes, ourStake in contract list - (done)
-
-- (GK) enable delete invoice in Invoice Table again (typescript problem) - (done)
-- (NK) save after updating an invoice 
-- (GK) add a search form to contract list - ()
-- (GK) add a search form to invoice list - ()
-- (GK) when registering or deploying smart contract go back to contract list
 - (NK) test / fix production lines in InvoicePage (remove wrong ones)
 - (NK) fix invoice date issue
+- (GK) SmartContract which I clicked should have a different row color 
 
+### Avion DB
+- (GK) Bug "I should not see the same contracts as you see"
+- (NK) write avion db version
+- (GK) add a search form to contract list - ()
+- (GK) add a search form to invoice list - ()
+- (NK) save after updating an invoice 
 
 ### 3rd party provider todos
 - (GK) deploy on matic
@@ -24,9 +22,10 @@
 - (GK) deploy to second blockchain (moonbeam)
 
 ### missing functions
-- (GK)  write invoice in € or $ or BTC or ETC display current value in another currency via chainlink price feed 
-- send invoice by email
+- invoice pdf
 - show, mark and filter paid and unpaid invoices 
+- send invoice by email
+
 
 ### design
 - NK - Logo, Icons
@@ -50,7 +49,16 @@
 - vision statement
 - write Documentation
 
+#### other projects like this
+- https://invoicing.request.network/login
+- https://cryptoinvoice.io
+
+
 ### Done
+- (2021-06-17) (GK) enable delete invoice in Invoice Table again (typescript problem) - (done)
+- (2021-06-17) (GK) Bug if clicking on List Invoices when in InvoicePage it should jump back to the correct contract
+- (2021-06-17) (GK) display totalStakes, ourStake in contract list - (done)
+- (2021-06-17) (GK) click & display invoice
 - (2021-06-14) (NK) save inoice with contract address
 - (2021-06-14) (NK) save invoice
 - (2021-06-14) (NK) fix broken InvoicePage 

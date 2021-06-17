@@ -45,7 +45,6 @@ function App() {
   useEffect(() => {
     if(tokenAddress!==undefined)setContractAddress(tokenAddress)
   }, [tokenAddress])
-  console.log('contractAddress in url:',contractAddress)
 
   useEffect(() => {
     invoiceNo?changeInvoiceMode(MODE_EDIT_INVOICES):changeInvoiceMode(MODE_LIST_INVOICES)
@@ -54,7 +53,7 @@ function App() {
   const LogoutButton = () => {return  <Button colorScheme="teal" onClick={() => logout()}>Logout</Button>}
   const displayContractList = () => {
     return (
-      <div className="app">
+      <div>
         <LogoutButton/>
         <Button colorScheme="purple" onClick={() => changeMode(MODE_NEW_CONTRACT)}>Deploy Token Project</Button>
         <p>&nbsp;</p>
@@ -71,7 +70,9 @@ function App() {
         <p>&nbsp;</p>
       {/* //editInvoiceFunc={() => changeInvoiceMode(MODE_EDIT_INVOICES) */}
         {invoiceMode === MODE_LIST_INVOICES && <InvoiceTable tokenAddress={tokenAddress}/>}
-        {invoiceMode === MODE_EDIT_INVOICES &&  <div className="app"><h1 className="center fs-30">React Invoice Generator</h1><InvoicePage tokenAddress={tokenAddress}/></div>}
+        {invoiceMode === MODE_EDIT_INVOICES &&  <div className="app"> 
+          <h1 className="center fs-30">React Invoice Generator</h1>
+        <InvoicePage tokenAddress={tokenAddress} invoiceNo={invoiceNo}/></div>}
       </div>
     )
   } 
