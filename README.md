@@ -11,8 +11,8 @@
 
 - (GK) enable delete invoice in Invoice Table again (typescript problem) - (done)
 - (NK) save after updating an invoice 
-- (GK) add a search form to contract list - (done)
-- (GK) add a search form to invoice list - (done)
+- (GK) add a search form to contract list - ()
+- (GK) add a search form to invoice list - ()
 - (GK) when registering or deploying smart contract go back to contract list
 - (NK) test / fix production lines in InvoicePage (remove wrong ones)
 - (NK) fix invoice date issue
