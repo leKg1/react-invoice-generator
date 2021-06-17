@@ -1,6 +1,7 @@
 # DeLi (Decentralized Live)
 
 ### TODOs
+- (GK) Bug if clicking on List Invoices when in InvoicePage it should jump back to the correct contract
 - (GK) click & display invoice
 - (GK) SmartContract which I clicked should have a different row color 
 - (GK) Bug I should not see the same contracts as you see
