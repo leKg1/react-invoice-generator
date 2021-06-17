@@ -1,8 +1,13 @@
 # DeLi (Decentralized Live)
 
 ### TODOs
+- (GK) click & display invoice
+- (GK) SmartContract which I clicked should have a different row color 
+- (GK) Bug I should not see the same contracts as you see
+- (GK) App starts always with wrong url
+- (GK) App should ask to connect with the correct blockchain (matic, ethereum, etc.) 
 - (GK) display totalStakes, ourStake in contract list - (done)
-- (NK) click & display invoice
+
 - (GK) enable delete invoice in Invoice Table again (typescript problem) - (done)
 - (NK) save after updating an invoice 
 - (GK) add a search form to contract list - (done)
