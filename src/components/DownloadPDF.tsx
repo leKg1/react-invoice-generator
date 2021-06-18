@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import InvoicePage from './InvoicePage'
-import { MoralisProvider } from 'react-moralis';
 
 interface Props {
    tokenAddress: string

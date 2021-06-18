@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState, useEffect } from 'react'
-import { Button, Heading} from "@chakra-ui/react"
+import { Button, Heading, Select} from "@chakra-ui/react"
 import { useMoralis } from 'react-moralis'
+import detectEthereumProvider from '@metamask/detect-provider';
 
 import SmartContractList from './components/SmartContractList';
 import InvoiceTable from './components/InvoiceTable';
@@ -23,6 +24,30 @@ interface Invoice {
   // data: any;
 }
 
+export const ETHEREUM_RINKEBY = {
+  chainId: '0x4',
+  chainName: 'Rinkeby Test Network',
+  nativeCurrency: {
+      name: 'Rinkeby Test Network',
+      symbol: 'ETH',
+      decimals: 18
+  },
+  rpcUrls: ['https://rinkeby.infura.io/v3/...'],
+  blockExplorerUrls: ['https://rinkeby.etherscan.io']
+}
+
+export const MATIC_MUMBAI = {
+  chainId: '0x13881',
+  chainName: 'Mumbai Testnet',
+  nativeCurrency: {
+      name: 'Mumbai Testnet',
+      symbol: 'MATIC',
+      decimals: 18
+  },
+  rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+  blockExplorerUrls: ['https://mumbai-explorer.matic.today']
+}
+
 function App() {
   const MODE_NEW_CONTRACT = "new_contract"
   const MODE_LIST_CONTRACTS = "list_contracts"
@@ -32,6 +57,7 @@ function App() {
   const [mode, setMode] = useState(MODE_LIST_CONTRACTS)
   const [invoiceMode, setInvoiceMode] = useState(MODE_LIST_INVOICES)
   const [contractAddress, setContractAddress] = useState("")
+  const [network, setNetwork] = useState("")
 
   const { authenticate, isAuthenticated, isAuthenticating, logout, } = useMoralis();
   const changeMode = (mode: string) => setMode(mode)
@@ -41,11 +67,43 @@ function App() {
   console.log('invoiceNo in url:',invoiceNo) 
 
   const history = useHistory();
+
+  const addNetwork = async (param: any) => {
+    const provider:any = await detectEthereumProvider();
+    
+    if (provider) {
+        provider.request({
+          method: 'wallet_addEthereumChain',
+          params: [param]
+        })
+        .catch((error: any) => {
+          console.log(error)
+        })
+        const accounts = await provider.request({ method: 'eth_requestAccounts' })
+        console.log("accounts",accounts)
+
+        const chainId = await provider.request({
+          method: 'eth_chainId'
+        })
+        console.log("chainId",chainId)
+    } else {
+        console.log('Please install MetaMask!');
+        return
+    }
+}
   
+  useEffect(() => {
+    if(network==="0"){
+      addNetwork(ETHEREUM_RINKEBY)
+    }else if(network==="1"){
+      addNetwork(MATIC_MUMBAI)
+    }
+  }, [network])
+  console.log("network",network)
+
   useEffect(() => {
     if(tokenAddress!==undefined)setContractAddress(tokenAddress)
   }, [tokenAddress])
-  console.log('contractAddress in url:',contractAddress)
 
   useEffect(() => {
     invoiceNo?changeInvoiceMode(MODE_EDIT_INVOICES):changeInvoiceMode(MODE_LIST_INVOICES)
@@ -54,7 +112,7 @@ function App() {
   const LogoutButton = () => {return  <Button colorScheme="teal" onClick={() => logout()}>Logout</Button>}
   const displayContractList = () => {
     return (
-      <div className="app">
+      <div>
         <LogoutButton/>
         <Button colorScheme="purple" onClick={() => changeMode(MODE_NEW_CONTRACT)}>Deploy Token Project</Button>
         <p>&nbsp;</p>
@@ -71,7 +129,9 @@ function App() {
         <p>&nbsp;</p>
       {/* //editInvoiceFunc={() => changeInvoiceMode(MODE_EDIT_INVOICES) */}
         {invoiceMode === MODE_LIST_INVOICES && <InvoiceTable tokenAddress={tokenAddress}/>}
-        {invoiceMode === MODE_EDIT_INVOICES &&  <div className="app"><h1 className="center fs-30">React Invoice Generator</h1><InvoicePage tokenAddress={tokenAddress}/></div>}
+        {invoiceMode === MODE_EDIT_INVOICES &&  <div className="app"> 
+          <h1 className="center fs-30">React Invoice Generator</h1>
+        <InvoicePage tokenAddress={tokenAddress} invoiceNo={invoiceNo}/></div>}
       </div>
     )
   } 
@@ -99,7 +159,15 @@ function App() {
         <p>&nbsp;</p>
       </div>
     )
-  } else return <Button isLoading={isAuthenticating} onClick={() => authenticate()}>Authenticate</Button>
+  } else return (
+    <div>
+    <Button isLoading={isAuthenticating} onClick={() => authenticate()}>Authenticate</Button>
+    <Select placeholder="Select network" onChange={(e)=>setNetwork(e.target.value)}>
+     <option value="0">Ethereum(Rinkeby)</option>
+     <option value="1">Matic(Mumbai)</option>
+    </Select>
+    </div>
+  )
 }
 
 export default App
