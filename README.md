@@ -17,6 +17,7 @@
 
 
 ### Avion DB
+- (GK) Authentification with Moralis must be replaced with a standard Metamask authentification
 - (GK) Bug "I should not see the same contracts as you see"
 - (NK) write avion db version
 - (GK) add a search form to contract list - ()
@@ -42,10 +43,10 @@
 
 ### smart contracts
 #### Staking Token
-- (GK) create updatable smart contract
 - (GK) rename FreelanceToken to DeLive DeLi
 - (NK) distribute invoice payments to stakers (x%)
-- (NK) 1% to parent token 
+- (GK) When somebody pays an invoice - received invoice should be distributed automatically according to stakes of stake holder- check https://vittominacori.github.io/erc1363-payable-token/#abstract if this is needed here. 
+- (NK) 1% to parent token after payment
 - (GK) add USDT, xDAI and other stable tokens to smart contract (should be able to send)
 
 
@@ -66,6 +67,7 @@
 - (2021-06-17) (GK) click & display invoice
 - (2021-06-17) (GK) Bug if clicking on List Invoices when in InvoicePage it should jump back to the correct contract
 - (2021-06-17) (GK) click & display invoice
+- (2021-06-17) (NK/GK) create updatable smart contract
 - (2021-06-15) (GK) enable delete invoice in Invoice Table again (typescript problem)
 - (2021-06-15) (GK) display totalStakes, ourStake in contract list
 - (2021-06-14) (NK) save inoice with contract address
