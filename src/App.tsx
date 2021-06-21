@@ -26,14 +26,15 @@ interface Invoice {
 
 export const ETHEREUM_RINKEBY = {
   chainId: '0x4',
-  chainName: 'Rinkeby Test Network',
-  nativeCurrency: {
-      name: 'Rinkeby Test Network',
-      symbol: 'ETH',
-      decimals: 18
-  },
-  rpcUrls: ['https://rinkeby.infura.io/v3/...'],
-  blockExplorerUrls: ['https://rinkeby.etherscan.io']
+}
+export const ETHEREUM_ROPSTEN = {
+  chainId: '0x3',
+}
+export const ETHEREUM_KOVAN = {
+  chainId: '0x2A',
+}
+export const ETHEREUM_GOERLI = {
+  chainId: '0x5',
 }
 
 export const MATIC_MUMBAI = {
@@ -46,6 +47,18 @@ export const MATIC_MUMBAI = {
   },
   rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
   blockExplorerUrls: ['https://mumbai-explorer.matic.today']
+}
+
+export const MOONBEAM_ALPHA = {
+  chainId: '0x507',
+  chainName: 'Moonbean Alpha',
+  nativeCurrency: {
+      name: 'Moonbean Alpha',
+      symbol: 'DEV',
+      decimals: 18
+  },
+  rpcUrls: ['https://rpc.testnet.moonbeam.network'],
+  blockExplorerUrls: ['https://moonbase-blockscout.testnet.moonbeam.network/']
 }
 
 function App() {
@@ -91,12 +104,45 @@ function App() {
         return
     }
 }
+
+  const switchNetwork = async (param: any) => {
+    const provider:any = await detectEthereumProvider();
+    
+    if (provider) {
+        provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [param]
+        })
+        .catch((error: any) => {
+          console.log(error)
+        })
+        const accounts = await provider.request({ method: 'eth_requestAccounts' })
+        console.log("accounts",accounts)
+
+        const chainId = await provider.request({
+          method: 'eth_chainId'
+        })
+        console.log("chainId",chainId)
+    } else {
+        console.log('Please install MetaMask!');
+        return
+    }
+}
   
   useEffect(() => {
-    if(network==="0"){
-      addNetwork(ETHEREUM_RINKEBY)
-    }else if(network==="1"){
+    if(network==="0x4"){
+      switchNetwork(ETHEREUM_RINKEBY)
+    }else if(network==="0x3"){
+      switchNetwork(ETHEREUM_ROPSTEN)
+    }else if(network==="0x2A"){
+      switchNetwork(ETHEREUM_KOVAN)
+    }else if(network==="0x5"){
+      switchNetwork(ETHEREUM_GOERLI)
+    }else if(network==="0x13881"){
       addNetwork(MATIC_MUMBAI)
+      // }else switchNetwork(MATIC_MUMBAI)
+    }else if(network==="0x507"){
+      addNetwork(MOONBEAM_ALPHA)
     }
   }, [network])
   console.log("network",network)
@@ -163,8 +209,12 @@ function App() {
     <div>
     <Button isLoading={isAuthenticating} onClick={() => authenticate()}>Authenticate</Button>
     <Select placeholder="Select network" onChange={(e)=>setNetwork(e.target.value)}>
-     <option value="0">Ethereum(Rinkeby)</option>
-     <option value="1">Matic(Mumbai)</option>
+     <option value="0x4">Ethereum(Rinkeby)</option>
+     <option value="0x3">Ethereum(Ropsten)</option>
+     <option value="0x2A">Ethereum(Kovan)</option>
+     <option value="0x5">Ethereum(Goerli)</option>
+     <option value="0x13881">Matic(Mumbai)</option>
+     <option value="0x507">Polkadot(Moonbeam)</option>
     </Select>
     </div>
   )
