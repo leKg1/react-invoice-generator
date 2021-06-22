@@ -17,7 +17,8 @@ import {
 import { Link } from "react-router-dom";
 import { abi } from "../abi"
 
-const SmartContractList =  () => {
+
+const SmartContractList = (props) => {
   const web3Lib = new Moralis.Web3();
   const [smartContractList, setSmartContractList] = useState([]);
   const limit = 10
@@ -65,11 +66,10 @@ const SmartContractList =  () => {
     getData() 
   }, [data]);
 
-
   // console.log('generating smartcontractlist', smartContractList)
   const contractRows = smartContractList.map((contract, i) => {
     return (
-      <Tr key={i}>
+      <Tr key={i} bg={(props.tokenAddress === contract.smartContractAddress) ? "purple.200" : ""}>
         <Td><Link to={"/contracts/" + contract.smartContractAddress}>{contract.name}</Link></Td>
         <Td><Link to={"/contracts/" + contract.smartContractAddress}>{contract.symbol}</Link></Td>
         <Td><Link to={"/contracts/" + contract.smartContractAddress}>{contract.decimals}</Link></Td>

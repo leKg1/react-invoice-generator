@@ -5,7 +5,8 @@ import {
   Tbody,
   Tr,
   Td,
-  Button
+  Button,
+  Select
 } from "@chakra-ui/react";
 
 import { Invoice, ProductLine } from '../data/types'
@@ -449,12 +450,10 @@ const InvoicePage: FC<Props> = ({pdfMode,tokenAddress,invoiceNo}) => {
                 />
               </View>
               <View className="w-50 p-5 flex" pdfMode={pdfMode}>
-                <EditableInput
-                  className="dark bold right ml-30"
-                  value={invoice.currency}
-                  onChange={(value) => handleChange('currency', value)}
-                  pdfMode={pdfMode}
-                />
+                  <Select placeholder="Select currency" onChange={(e)=>handleChange('currency',e.target.value)}>
+                    <option value="ETH">ETH</option>
+                    <option value="DeLi">DeLi</option>
+                  </Select>
                 <Text className="right bold dark w-auto" pdfMode={pdfMode}>
                   {(typeof subTotal !== 'undefined' && typeof saleTax !== 'undefined'
                     ? subTotal + saleTax

@@ -2,7 +2,6 @@
 
 ### TODOs
 
-- (GK) SmartContract which I clicked should have a different row color 
 - (GK) Bug I should not see the same contracts as you see
 - (GK) App starts always with wrong url
 - (NK) save after updating an invoice 
@@ -63,6 +62,7 @@
 
 
 ### Done
+- (2021-06-22) (GK) SmartContract which I clicked should have a different row color 
 - (2021-06-18) (GK) Add a drop down with 2 networks - (rinkeby and matic-mumbay)
 - (2021-06-17) (GK) click & display invoice
 - (2021-06-17) (GK) Bug if clicking on List Invoices when in InvoicePage it should jump back to the correct contract
