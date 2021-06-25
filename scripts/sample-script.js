@@ -14,6 +14,7 @@ async function main() {
   // manually to make sure everything is compiled
   await hre.run('compile');
 
+  const usdtAddress = "0xd92e713d051c37ebb2561803a3b5fbabc4962431"
   const accounts = await ethers.getSigners();
   console.log("firstAccounts", accounts[0].address)
 
@@ -24,7 +25,7 @@ async function main() {
   const DeLive = await hre.ethers.getContractFactory("DeLive");
   const delive = await DeLive.deploy("DeLive",
   "DeLi",
-  "1000000000000000000000000");
+  "1000000000000000000000000", usdtAddress);
 
   await delive.deployed();
 

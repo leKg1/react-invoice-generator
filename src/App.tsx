@@ -189,7 +189,7 @@ function App() {
         <Button colorScheme="purple" onClick={() => changeMode(MODE_LIST_CONTRACTS)}>My Token Projects</Button>
         <p>&nbsp;</p>
         <Heading textAlign="center" color="gray.700">Deploy New Staking Token</Heading>
-        <DeploySmartContract />
+        <DeploySmartContract tokenAddress={tokenAddress} />
       </div>
     )
 }

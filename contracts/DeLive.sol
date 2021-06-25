@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol"
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 /**
  * @title Staking Token (STK)
@@ -13,6 +13,8 @@ import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol"
  * @author (modifier) Gouaby Kalivogui Russia
  * @notice Implements a basic ERC20 staking token with incentive distribution.
  */
+
+
 contract DeLive is ERC20, Ownable {
 
     using SafeMath for uint256;
@@ -21,14 +23,16 @@ contract DeLive is ERC20, Ownable {
     address[] internal stakeholders;
     mapping(address => uint256) internal stakes;
     mapping(address => uint256) internal rewards;
+    address usdtAddress;
 
     /**
      * @notice The constructor for the Staking Token.
      */
-    constructor(string memory name,string memory symbol, uint256 _supply) 
+    constructor(string memory name,string memory symbol, uint256 _supply, address _usdtAddress) 
         public ERC20(name, symbol) 
     { 
         _mint(address(this), _supply);
+        usdtAddress = _usdtAddress;
     }
     
     // ---------- STAKES ----------
@@ -220,10 +224,12 @@ contract DeLive is ERC20, Ownable {
     }
 
     /**
-     * @notice The 
+     * @notice This smart contract should be able to receive and send USDT. 
      */
-    function transferTether(contract IERC20 token, address to, uint256 value) external onlyOwner {
-        safeTransfer(token, to, value);
+
+    function sendUSDT(address _to, uint256 _amount) external {
+        IERC20 usdt = IERC20(usdtAddress);
+        usdt.safeTransfer(_to, _amount);
     }
 
     /**

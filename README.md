@@ -12,7 +12,6 @@
 - (GK) App should ask to connect with the correct blockchain (matic, ethereum, etc.) 
 - (NK) test / fix production lines in InvoicePage (remove wrong ones)
 - (NK) fix invoice date issue
-- (GK) SmartContract which I clicked should have a different row color 
 
 
 ### Avion DB
@@ -62,6 +61,7 @@
 
 
 ### Done
+- (2021-06-25) (GK) add USDT, xDAI and other stable tokens to smart contract (should be able to send)
 - (2021-06-22) (GK) SmartContract which I clicked should have a different row color 
 - (2021-06-18) (GK) Add a drop down with 2 networks - (rinkeby and matic-mumbay)
 - (2021-06-17) (GK) click & display invoice
