@@ -7,7 +7,7 @@ describe("DeLive", function() {
 
   it("Should send usdt from smart contract", async function() {
 
-    const provider = new ethers.providers.getDefaultProvider("");
+    const provider = new ethers.providers.getDefaultProvider("https://rinkeby.infura.io/v3/ee60dc0cdbe24ec9b6e83a00f3363fb0");
     // const deLiTokenAddressWithUsdt = "0xa2a305b7fcc4cbc4353c29990069e5df24958cf2"
     const deLiTokenAddressWithUsdt = "0xa85D33bc208E741a70EaeDD7375fcE76F19ba40E"
     const metamaskAccWithUsdt = "0x0c9D471976833dC2E910527163DBACf780D30DFF"

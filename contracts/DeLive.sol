@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol";
 
 /**
  * @title Staking Token (STK)
@@ -20,19 +21,24 @@ contract DeLive is ERC20, Ownable {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
+     AggregatorV3Interface internal priceFeed;
+
     address[] internal stakeholders;
     mapping(address => uint256) internal stakes;
     mapping(address => uint256) internal rewards;
     address usdtAddress;
+    address priceFeedAddress;
 
     /**
      * @notice The constructor for the Staking Token.
      */
-    constructor(string memory name,string memory symbol, uint256 _supply, address _usdtAddress) 
+    constructor(string memory name,string memory symbol, uint256 _supply, address _usdtAddress, address _priceFeedAddress) 
         public ERC20(name, symbol) 
     { 
         _mint(address(this), _supply);
         usdtAddress = _usdtAddress;
+        priceFeedAddress = _priceFeedAddress;
+        priceFeed = AggregatorV3Interface(_priceFeedAddress);
     }
     
     // ---------- STAKES ----------
@@ -230,6 +236,17 @@ contract DeLive is ERC20, Ownable {
     function sendUSDT(address _to, uint256 _amount) external {
         IERC20 usdt = IERC20(usdtAddress);
         usdt.safeTransfer(_to, _amount);
+    }
+
+    function getLatestPrice() public view returns (int) {
+        (
+            uint80 roundID, 
+            int price,
+            uint startedAt,
+            uint timeStamp,
+            uint80 answeredInRound
+        ) = priceFeed.latestRoundData();
+        return price;
     }
 
     /**

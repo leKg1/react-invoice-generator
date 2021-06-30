@@ -20,6 +20,11 @@ export const abi = [
         "internalType": "address",
         "name": "_usdtAddress",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_priceFeedAddress",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -259,6 +264,19 @@ export const abi = [
     "name": "distributeRewards",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getLatestPrice",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

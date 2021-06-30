@@ -25,7 +25,9 @@ const DeploySmartContract = (props) => {
   const [usdtAmount, setUsdtAmount] = useState(0);
   const [toUsdtAddress, setToUsdtAddress] = useState("");
 
-  const usdtAddress = "0x3b00ef435fa4fcff5c209a37d1f3dcff37c705ad" //rinkeby, please change
+  const usdtAddress = "0xd92e713d051c37ebb2561803a3b5fbabc4962431" //rinkeby, please change
+  const ethUsdAddress = "0x8A753747A1Fa494EC906cE90E9f37563A8AF630e" //ETH/USD rinkeby, please change
+  // const ethUsdtAddress = "0x10900f50d1bC46b4Ed796C50A4Cc63791CaF7501" //ETH/USDT Kovan, please change
 
   const { user } = useMoralis();
   const { isSaving, error, save } = useNewMoralisObject('FreelanceToken');
@@ -47,7 +49,7 @@ const DeploySmartContract = (props) => {
 
     try {
         const contract = await ourMelalieSmartContract
-        .deploy({data: bytecode,arguments: [tokenName, tokenSymbol, tokenInitialSupply, usdtAddress],})
+        .deploy({data: bytecode,arguments: [tokenName, tokenSymbol, tokenInitialSupply, usdtAddress, ethUsdAddress],})
         .send({from: account1,gas: 4000000,});
         console.log(contract)
         console.log(contract.options)

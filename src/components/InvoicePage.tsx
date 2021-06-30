@@ -27,7 +27,11 @@ import {
   useParams
 } from "react-router-dom";
 import { useMoralis, useMoralisQuery, useNewMoralisObject } from 'react-moralis'
-// import Moralis from 'moralis';
+import Moralis from 'moralis';
+import Web3 from "web3";
+import { abi } from "../abi"
+import { bytecode } from '../bytecode';
+import detectEthereumProvider from '@metamask/detect-provider';
 
 
 Font.register({
@@ -51,6 +55,8 @@ const InvoicePage: FC<Props> = ({pdfMode,tokenAddress,invoiceNo}) => {
   const [invoice, setInvoice] = useState<Invoice>({...initialInvoice})
   const [subTotal, setSubTotal] = useState<number>()
   const [saleTax, setSaleTax] = useState<number>()
+  const [ethUsdtPrice, setEthUsdtPrice] = useState<number>()
+  const [invoiceCurrency, setInvoiceCurrency] = useState<string>()
   
   // const { invoiceNo, tokenAddress } = useParams<{ invoiceNo: string, tokenAddress: string }>();
   // const { tokenAddress } = useParams<{ tokenAddress: string }>();
@@ -68,6 +74,30 @@ const InvoicePage: FC<Props> = ({pdfMode,tokenAddress,invoiceNo}) => {
         setInvoice(data[0].attributes.invoice)
       }
   },[data]) 
+
+  const getLatestCurrencyPrice = async () => {
+
+    const web3 = await Moralis.Web3.enable();
+    const accounts = await web3.eth.getAccounts();
+    const account1 = accounts[0];
+    const myNewContract = new web3.eth.Contract(abi,tokenAddress);
+
+      try {
+        const getPrice = await  myNewContract.methods.getLatestPrice().call()
+        alert("succefully got the latest price!")
+        console.log("latest price", getPrice/100000000)
+        setEthUsdtPrice(getPrice/100000000)
+      } catch (error) {
+        alert(error)
+      }
+    
+  }
+
+  useEffect(() => {
+    getLatestCurrencyPrice()
+
+},[]) 
+
 
   const dateFormat = 'MMM dd, yyyy'
   const invoiceDate = invoice.invoiceDate !== '' ? new Date(invoice.invoiceDate) : new Date()
@@ -164,6 +194,15 @@ const InvoicePage: FC<Props> = ({pdfMode,tokenAddress,invoiceNo}) => {
       invoice.tokenAddress = tokenAddress
      save({invoice, user})
   }
+
+  const priceInETH = (typeof ethUsdtPrice !== 'undefined' && typeof subTotal !== 'undefined' && typeof saleTax !== 'undefined'
+   ? (subTotal + saleTax)/ethUsdtPrice : 0).toFixed(2)
+  const priceInUSDT = (typeof ethUsdtPrice !== 'undefined' && typeof subTotal !== 'undefined' && typeof saleTax !== 'undefined'
+   ? (subTotal + saleTax) : 0).toFixed(2)
+   console.log("invoiceCurrency", invoiceCurrency)
+   console.log("ethUsdtPrice", ethUsdtPrice)
+   console.log("priceInUSDT", priceInUSDT)
+   console.log("priceInETH", priceInETH)
 
   return (
     <div><Button colorScheme="purple" onClick={saveInvoice}>Save</Button> 
@@ -450,15 +489,45 @@ const InvoicePage: FC<Props> = ({pdfMode,tokenAddress,invoiceNo}) => {
                 />
               </View>
               <View className="w-50 p-5 flex" pdfMode={pdfMode}>
-                  <Select placeholder="Select currency" onChange={(e)=>handleChange('currency',e.target.value)}>
+                  <Select placeholder="Select currency" onChange={(e)=>{
+                    handleChange('currency',e.target.value)
+                    setInvoiceCurrency(e.target.value)
+                    }}>
                     <option value="ETH">ETH</option>
                     <option value="DeLi">DeLi</option>
+                    <option value="USDT">USDT</option>
                   </Select>
                 <Text className="right bold dark w-auto" pdfMode={pdfMode}>
                   {(typeof subTotal !== 'undefined' && typeof saleTax !== 'undefined'
                     ? subTotal + saleTax
                     : 0
-                  ).toFixed(2)}
+                  ).toFixed(2)
+                  }
+                </Text>
+              </View>
+            </View>
+            <View className="flex bg-gray p-5" pdfMode={pdfMode}>
+              <View className="w-50 p-5" pdfMode={pdfMode}>
+                <EditableInput
+                  className="bold"
+                  value={"TOTAL IN"}
+                  pdfMode={pdfMode}
+                />
+              </View>
+              <View className="w-50 p-5 flex" pdfMode={pdfMode}>
+                  <Select placeholder="Select currency" onChange={(e)=>{
+                    handleChange('currency',e.target.value)
+                    setInvoiceCurrency(e.target.value)
+                    }}>
+                    <option value="ETH">ETH</option>
+                    <option value="DeLi">DeLi</option>
+                    <option value="USDT">USDT</option>
+                  </Select>
+                <Text className="right bold dark w-auto" pdfMode={pdfMode}>
+                  {invoiceCurrency === "ETH"
+                    ? priceInETH
+                    : priceInUSDT
+                  }
                 </Text>
               </View>
             </View>

@@ -7,7 +7,6 @@
 - (NK) save after updating an invoice 
 - (GK) add a search form to contract list - ()
 - (GK) add a search form to invoice list - ()
-- (GK) write invoice in € or $ or BTC or ETC display current value in another currency via chainlink price feed 
 - (GK) when registering or deploying smart contract go back to contract list
 - (GK) App should ask to connect with the correct blockchain (matic, ethereum, etc.) 
 - (NK) test / fix production lines in InvoicePage (remove wrong ones)
@@ -61,6 +60,7 @@
 
 
 ### Done
+- (2021-06-30) (GK) write invoice in € or $ or BTC or ETC display current value in another currency via chainlink price feed 
 - (2021-06-25) (GK) add USDT, xDAI and other stable tokens to smart contract (should be able to send)
 - (2021-06-22) (GK) SmartContract which I clicked should have a different row color 
 - (2021-06-18) (GK) Add a drop down with 2 networks - (rinkeby and matic-mumbay)
